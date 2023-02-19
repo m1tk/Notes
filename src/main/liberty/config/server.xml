@@ -1,0 +1,30 @@
+<server description="Webby">
+    <featureManager>
+        <feature>servlet-5.0</feature>
+        <feature>pages-3.0</feature>
+        <feature>jdbc-4.3</feature>
+        <feature>jndi-1.0</feature>
+    </featureManager>
+
+    <jdbcDriver 
+            libraryRef='mydb'/>
+
+    <library id="mydb">
+        <fileset dir="jdbc" includes="mariadb-java-client-3.1.2.jar"/>
+    </library>
+
+    <dataSource jndiName="jdbc/mariach">
+        <jdbcDriver
+            javax.sql.DataSource="org.mariadb.jdbc.MariaDbDataSource"
+            javax.sql.ConnectionPoolDataSource="org.mariadb.jdbc.MariaDbDataSource"
+            javax.sql.XADataSource="org.mariadb.jdbc.MariaDbDataSource"
+            libraryRef="mydb"/>
+        <properties url="jdbc:mariadb://127.0.0.1/web_auth"
+                    user="web_rmi" password="webweb"/>
+    </dataSource>
+
+
+    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"  host="*" />
+
+    <webApplication id="webby" location="webby.war" contextRoot="${app.context.root}" />
+</server>

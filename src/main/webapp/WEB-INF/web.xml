@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    version="3.1">
+    <display-name>Notes management</display-name>
+   
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/404.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <exception-type>estm.dsic.webby.Errors.AuthError</exception-type>
+        <location>/WEB-INF/jsp/auth.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>estm.dsic.webby.Errors.SignError</exception-type>
+        <location>/WEB-INF/jsp/auth.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>estm.dsic.webby.Errors.AdminError</exception-type>
+        <location>/WEB-INF/jsp/admin/index.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>estm.dsic.webby.Errors.UserError</exception-type>
+        <location>/WEB-INF/jsp/client/index.jsp</location>
+    </error-page>
+</web-app>

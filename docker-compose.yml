@@ -1,0 +1,14 @@
+version: '3'
+services:
+  db:
+    image: docker.io/mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: web_auth
+      MYSQL_USER: web_rmi
+      MYSQL_PASSWORD: webweb
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./migrate/:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"

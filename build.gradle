@@ -1,0 +1,80 @@
+apply plugin: 'war'
+apply plugin: 'liberty'
+
+group = "estm.dsic"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.5.2'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+  jdbcLib
+}
+
+dependencies {
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+    implementation group: 'commons-logging', name: 'commons-logging', version: '1.2'
+    implementation 'org.springframework.security:spring-security-crypto:5.8.1'
+    
+    providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:10.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
+    testImplementation 'commons-httpclient:commons-httpclient:3.1'
+
+    jdbcLib 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
+}
+
+task copyJDBC(type: Copy) {
+  from configurations.jdbcLib
+  into 'build/wlp/usr/servers/defaultServer/jdbc'
+  include '*.jar'
+}
+
+deploy.dependsOn 'copyJDBC'
+
+ext  {
+    liberty.server.var.'default.http.port' = '9080'
+    liberty.server.var.'default.https.port' = '9443'
+    liberty.server.var.'app.context.root' = project.name
+}
+
+task openBrowser {
+    description = 'Open browser to the running application'
+    doLast {
+        String port = liberty.server.var.'default.http.port'
+        String context = liberty.server.var.'app.context.root'
+        String URL = "http://localhost:" + port + "/" + context + "/" + "servlet"
+        java.awt.Desktop.desktop.browse URL.toURI()
+        java.awt.Desktop.desktop.browse file("$buildDir/reports/tests/test/index.html").toURI()
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed', 'standardOut'
+        exceptionFormat 'full'
+    }
+    systemProperty 'http.port', liberty.server.var.'default.http.port'
+    systemProperty 'context.root',  liberty.server.var.'app.context.root'
+}
+
+test.dependsOn 'libertyStart'
+test.finalizedBy(openBrowser)
+clean.dependsOn 'libertyStop'
