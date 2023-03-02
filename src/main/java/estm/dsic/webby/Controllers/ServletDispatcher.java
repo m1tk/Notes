@@ -1,4 +1,4 @@
-package estm.dsic.webby.web;
+package estm.dsic.webby.Controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @WebServlet(urlPatterns = "/")
-public class Controller extends HttpServlet {
+public class ServletDispatcher extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,37 +33,39 @@ public class Controller extends HttpServlet {
         String uri    = request.getServletPath();
         String method = request.getMethod();
 
+        RequestDispatcher rd;
+
         if (uri.equals("/")) {
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");  
+            rd = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");  
             rd.forward(request, response);
             return;
         } else if (uri.equals("/auth")) {
             if (method.equals("GET")) {
-                AuthService.get(this, request, response);
+                AuthController.get(this, request, response);
                 return;
             } else if (method.equals("POST")) {
-                AuthService.post(this, request, response);
+                AuthController.post(this, request, response);
                 return;
             }
         } else if (uri.equals("/admin")) {
             if (method.equals("GET")) {
-                AdminService.get(this, request, response);
+                AdminController.get(this, request, response);
                 return;
             }
         } else if (uri.equals("/dashboard")) {
             if (method.equals("GET")) {
-                UserService.get(this, request, response);
+                UserController.get(this, request, response);
                 return;
             } else if (method.equals("POST")) {
-                UserService.post(this, request, response);
+                UserController.post(this, request, response);
                 return;
             }
         } else if (uri.equals("/dashboard/recent")) {
             if (method.equals("GET")) {
-                UserService.get(this, request, response);
+                UserController.get(this, request, response);
                 return;
             } else if (method.equals("POST")) {
-                UserService.post(this, request, response);
+                UserController.post(this, request, response);
                 return;
             }
         } else if (uri.equals("/logout")) {
@@ -84,7 +86,7 @@ public class Controller extends HttpServlet {
             return;
         }
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/404.jsp");  
+        rd = request.getRequestDispatcher("/WEB-INF/jsp/404.jsp");  
         rd.forward(request, response);
     }
 }

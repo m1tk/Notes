@@ -1,4 +1,4 @@
-package estm.dsic.webby.web;
+package estm.dsic.webby.Controllers;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-public class UserService {
+public class UserController {
     public static void get(HttpServlet ctx, HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         HttpSession session = request.getSession();
